@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SimPadController.Enum;
+using SimPadController.Model;
 
 namespace SimPadController.Device
 {
@@ -19,21 +21,6 @@ namespace SimPadController.Device
         public int Version { get => getVersion(); }
         public int ChipID { get => getChipID(); }
 
-        public enum SimPadSetting
-        {
-            Blank = 0,
-            Key1,
-            Key2,
-            Key3,
-            Key4,
-            Key5,
-            LED0RGB,
-            LED1RGB,
-            LightMode,
-            DelayInput,
-            SuperSpeed,
-            LightSpeed
-        }
 
         public SimPad(HidSharp.HidDevice device)
         {
@@ -77,7 +64,7 @@ namespace SimPadController.Device
 
         private int getVersion()
         {
-            var result = this.SendDataAndReceive(dataGetVersion);
+            var result = SendDataAndReceive(dataGetVersion);
 
             var str = String.Join("", from i in result.Take(4) select i.ToString().PadLeft(2, '0'));
 
@@ -86,14 +73,14 @@ namespace SimPadController.Device
 
         private int getChipID()
         {
-            var result = this.SendDataAndReceive(dataGetChipID);
+            var result = SendDataAndReceive(dataGetChipID);
 
             var str = String.Join("", from i in result.Take(4) select i.ToString().PadLeft(2, '0'));
 
             return Convert.ToInt32(str);
         }
 
-        public virtual byte[] GetSetting(byte pointer)
+        public virtual byte[] GetSettingFromDevice(byte pointer)
         {
             var dat = new byte[] { 0x00, 0x01, pointer, 0x00, 0x00, 0x00, 0x00 };
 
@@ -102,13 +89,73 @@ namespace SimPadController.Device
 
         public virtual void RefreshSettings()
         {
-            this.settings = new byte[settingsCount][];
+            settings = new byte[settingsCount][];
             for(int i = 0; i < settingsCount; ++i)
             {
-                this.settings[i] = GetSetting((byte)i);
+                settings[i] = GetSettingFromDevice((byte)i);
             }   
         }
 
+        public virtual void ApplySettings()
+        {
+            // TODO
+        }
+
+        public virtual void SetBootMode()
+        {
+            var dat = new byte[] { 0x00, 0x0b, 0x00, 0x00, 0x00, 0x0b };
+
+            SendData(dat);
+        }
+
+        public virtual byte[] GetSettingBytes(SimPadSetting setting)
+        {
+            if (settings == null) RefreshSettings();
+            return settings[(int)setting];
+        }
+
+        public virtual void SetSettingBytes(SimPadSetting setting, byte[] bytes)
+        {
+            if (settings == null) RefreshSettings();
+            settings[(int)setting] = bytes;
+        }
+
+
+        public virtual KeySetting GetKeySetting(uint number)
+        {
+            if( number < 1 && number > 5)
+            {
+                throw new Exception("Key number out of range!");
+            }
+
+            var settingKey = (SimPadSetting)(number + 1);
+            var keyBytes = GetSettingBytes(settingKey);
+
+            return new KeySetting
+            {
+                Normal = (SimPadKeyNormal)keyBytes[0],
+                Special = (SimPadKeySpecial)keyBytes[1],
+                Mouse = (SimPadKeyMouse)keyBytes[2]
+            };
+        }
+
+        public virtual void SetKeySetting(int number, KeySetting setting)
+        {
+            if (number < 1 && number > 5)
+            {
+                throw new Exception("Key number out of range!");
+            }
+
+            var settingKey = (SimPadSetting)(number + 1);
+
+            var bytes = new byte[8];
+
+            bytes[0] = (byte)setting.Normal;
+            bytes[1] = (byte)setting.Special;
+            bytes[2] = (byte)setting.Mouse;
+
+            SetSettingBytes(settingKey, bytes);
+        }
 
         
     }

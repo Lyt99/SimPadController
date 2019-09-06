@@ -8,6 +8,6 @@ namespace SimPadController.Device
 {
     class SimPadV2 : SimPad
     {
-    
+        
     }
 }
