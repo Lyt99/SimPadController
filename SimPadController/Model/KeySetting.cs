@@ -7,10 +7,13 @@ using SimPadController.Enum;
 
 namespace SimPadController.Model
 {
-    class KeySetting
+    /// <summary>
+    /// 键位设置
+    /// </summary>
+    public class KeySetting
     {
-        public SimPadKeyNormal Normal;
-        public SimPadKeySpecial Special;
-        public SimPadKeyMouse Mouse;
+        public SimPadKeyNormal Normal = SimPadKeyNormal.None;
+        public SimPadKeySpecial Special = SimPadKeySpecial.None;
+        public SimPadKeyMouse Mouse = SimPadKeyMouse.None;
     }
 }

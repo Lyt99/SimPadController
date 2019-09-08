@@ -4,16 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{28CB8035-44A5-4CB3-8D82-C3E1F1ED5BFD}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SimPadController</RootNamespace>
-    <AssemblyName>SimPadController</AssemblyName>
+    <ProjectGuid>{EDAF8588-05D1-477F-B20E-6B8CF74B7265}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>SimPadController_Test</RootNamespace>
+    <AssemblyName>SimPadController_Test</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -31,9 +33,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HidSharp, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\HidSharp.2.1.0\lib\net35\HidSharp.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,23 +43,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Device\SimPad.cs" />
-    <Compile Include="Device\SimPadNano.cs" />
-    <Compile Include="Device\SimPadV2.cs" />
-    <Compile Include="Device\SimPadV2Ex.cs" />
-    <Compile Include="Device\SimPadV2Lite.cs" />
-    <Compile Include="Enum\Key.cs" />
-    <Compile Include="Enum\LightsType.cs" />
-    <Compile Include="Enum\NightLights.cs" />
-    <Compile Include="Enum\Settings.cs" />
-    <Compile Include="Model\Color.cs" />
-    <Compile Include="Model\KeySetting.cs" />
-    <Compile Include="Model\LightSpeed.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SimPadController.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SimPadController\SimPadController.csproj">
+      <Project>{28cb8035-44a5-4cb3-8d82-c3e1f1ed5bfd}</Project>
+      <Name>SimPadController</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

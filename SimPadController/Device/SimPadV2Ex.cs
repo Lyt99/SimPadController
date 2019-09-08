@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace SimPadController.Device
 {
-    public class SimPadV2 : SimPad
+    class SimPadV2Ex : SimPad
     {
-        public override string DisplayName => "Simpad 版本2";
+        public override string DisplayName => "SimPad 版本2 - EX";
 
-        public SimPadV2(HidSharp.HidDevice device) : base(device)
+        public SimPadV2Ex(HidSharp.HidDevice device) : base(device)
         {
-            
+
         }
 
         internal override int getChipID() // 不可用，重写

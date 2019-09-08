@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 namespace SimPadController.Enum
 {
 
-    // 类型为0，互斥
+    /// <summary>
+    /// 普通按键，类型为0，互斥
+    /// </summary>
     public enum SimPadKeyNormal
     {
         None = 0,
@@ -109,7 +111,9 @@ namespace SimPadController.Enum
         NumPadPeriod = 99
     }
 
-    // 类型为1，取&运算(?) 我觉得应该是或运算
+    /// <summary>
+    /// 特殊按键，类型为1，取&运算(?) 我觉得应该是或运算
+    /// </summary>
     public enum SimPadKeySpecial
     {
         None = 0,
@@ -123,7 +127,9 @@ namespace SimPadController.Enum
         RightCtrl = 65536,
     }
 
-    // 类型为2，鼠标
+    /// <summary>
+    /// 鼠标按键，类型为2
+    /// </summary>
     public enum SimPadKeyMouse
     {
         None = 0,
