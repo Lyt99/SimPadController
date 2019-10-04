@@ -21,7 +21,14 @@ namespace SimPadController.Device
 
         internal HashSet<SimPadSetting> dirtySet = new HashSet<SimPadSetting>();
 
+        /// <summary>
+        /// 该设备的名字
+        /// </summary>
         public virtual string DisplayName => "SimPad";
+
+        /// <summary>
+        /// 该设备拥有的键的个数
+        /// </summary>
         public virtual int KeyCount => 5;
 
         /// <summary>
@@ -130,13 +137,13 @@ namespace SimPadController.Device
             if (dirtySet.Count == 0) return;
             foreach(var i in dirtySet)
             {
-                ApplySetting(i);
+                ApplySetting(i, false);
             }
 
             dirtySet.Clear();
         }
          
-        public virtual void ApplySetting(SimPadSetting setting)
+        public virtual void ApplySetting(SimPadSetting setting, bool clearDirty = true)
         {
             var bytes = GetSettingBytes(setting);
 
@@ -154,6 +161,8 @@ namespace SimPadController.Device
             };
 
             SendData(dataBytes);
+
+            if (clearDirty) dirtySet.Remove(setting);
         }
 
         /// <summary>
@@ -262,7 +271,7 @@ namespace SimPadController.Device
             {
                 R = bytes[0],
                 G = bytes[1],
-                B = bytes[3]
+                B = bytes[2]
             };
         }
 
@@ -299,7 +308,7 @@ namespace SimPadController.Device
                 int value = bytes[0] << 24
                     + bytes[1] << 16
                     + bytes[2] << 8
-                    + bytes[3]; // 竟然是大端
+                    + bytes[2]; // 竟然是大端
 
                 return value;
             }

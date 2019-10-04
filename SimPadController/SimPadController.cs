@@ -12,12 +12,31 @@ namespace SimPadController
     {
         private readonly int vendorID = 0x8088;
 
+        private SimPad[] deviceList;
+        private int DeviceCount => deviceList.Length;
+
+        public delegate void SimpadDeviceChangedEvent(object sender, SimPadDeviceChangedEventArgs e);
+        public event SimpadDeviceChangedEvent OnSimpadDeviceChanged;
+
+
+
+        public SimPadController()
+        {
+            DeviceList.Local.Changed += OnDeviceChanged;
+            this.deviceList = getDevices();
+        }
+
         public IEnumerable<SimPad> GetDevices()
         {
-            return HidSharp.DeviceList.Local.GetHidDevices(vendorID)
-                .Where(i => i.DevicePath.Contains("&mi_01"))
+            return this.deviceList;
+        }
+
+        private SimPad[] getDevices()
+        {
+            return DeviceList.Local.GetHidDevices(vendorID)
+                .Where(i => i.DevicePath.Contains("&mi_01")) // 难看的硬编码
                 .Select(i => getSimPadInstance(i))
-                .Where(i => i != null);
+                .Where(i => i != null).ToArray();
         }
 
         private SimPad getSimPadInstance(HidSharp.HidDevice device)
@@ -39,6 +58,25 @@ namespace SimPadController
             }
         }
 
-        // TODO: OnChange
+        private void OnDeviceChanged(object sender, DeviceListChangedEventArgs e)
+        {
+            var newDevices = getDevices();
+            if(DeviceCount != newDevices.Length)
+            {
+                bool isNew = this.deviceList.Length < newDevices.Length;
+                var distinct = isNew ? newDevices.Except(this.deviceList) : this.deviceList.Except(newDevices);
+                var arg = new SimPadDeviceChangedEventArgs
+                {
+                    IsNew = isNew,
+                    devices = distinct.ToArray()
+                };
+
+
+                this.deviceList = newDevices;
+
+                OnSimpadDeviceChanged?.Invoke(this, null);
+                
+            }
+        }
     }
 }

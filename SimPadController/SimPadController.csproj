@@ -58,6 +58,7 @@
     <Compile Include="Model\LightSpeed.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimPadController.cs" />
+    <Compile Include="SimPadDeviceChangedEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
