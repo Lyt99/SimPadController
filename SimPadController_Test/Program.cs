@@ -24,18 +24,7 @@ namespace SimPadController_Test
                     Console.WriteLine("按键{0}绑定: {1} + {2} + {3}", j, kc.Normal, kc.Special, kc.Mouse);
                 }
 
-                Console.WriteLine("将按键1改为Z");
-                KeySetting k = new KeySetting()
-                {
-                    Normal = SimPadKeyNormal.Z
-                };
-                i.SetKeySetting(1, k);
-
-
-                i.LightsType = LightsType.EaseOut;
-
-                Console.WriteLine("应用设置");
-                i.ApplyAllSettings();
+                Console.Write("消抖数值: {0} {1}", i.DelayInput, String.Join(",", i.GetSettingBytes(SimPadSetting.DelayInput)));
             }
 
             Console.ReadLine();

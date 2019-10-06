@@ -92,6 +92,10 @@ namespace SimPadController.Device
         }
 
 
+        /// <summary>
+        /// 获得版本
+        /// </summary>
+        /// <returns></returns>
         internal virtual int getVersion()
         {
             var result = SendDataAndReceive(dataGetVersion);
@@ -101,6 +105,10 @@ namespace SimPadController.Device
             return Convert.ToInt32(str);
         }
 
+        /// <summary>
+        /// 获得芯片ID
+        /// </summary>
+        /// <returns></returns>
         internal virtual int getChipID()
         {
             var result = SendDataAndReceive(dataGetChipID);
@@ -110,6 +118,7 @@ namespace SimPadController.Device
             return Convert.ToInt32(str);
         }
 
+        
         internal byte[] getSettingFromDevice(byte setting)
         {
             var dat = new byte[] { 0x00, 0x01, setting, 0x00, 0x00, 0x00, 0x00 };
@@ -143,6 +152,11 @@ namespace SimPadController.Device
             dirtySet.Clear();
         }
          
+        /// <summary>
+        /// 应用某项设置
+        /// </summary>
+        /// <param name="setting"></param>
+        /// <param name="clearDirty">是否清除Dirty</param>
         public virtual void ApplySetting(SimPadSetting setting, bool clearDirty = true)
         {
             var bytes = GetSettingBytes(setting);
@@ -200,10 +214,14 @@ namespace SimPadController.Device
         public virtual void SetSettingBytes(SimPadSetting setting, byte[] bytes)
         {
             if (settings == null) RefreshSettings();
-            dirtySet.Add(setting);
-            settings[(int)setting] = bytes;
-        }
+            byte[] original = settings[(int)setting];
+            if(!original.SequenceEqual(bytes)) // 不相等的时候才会应用设置
+            {
+                dirtySet.Add(setting);
+                settings[(int)setting] = bytes;
+            }
 
+        }
 
         /// <summary>
         /// 获得键位设置数据
@@ -305,10 +323,10 @@ namespace SimPadController.Device
             {
                 var bytes = GetSettingBytes(SimPadSetting.DelayInput);
 
-                int value = bytes[0] << 24
-                    + bytes[1] << 16
-                    + bytes[2] << 8
-                    + bytes[2]; // 竟然是大端
+                int value = (bytes[0] << 24)
+                    + (bytes[1] << 16)
+                    + (bytes[2] << 8)
+                    + bytes[3]; // 竟然是大端
 
                 return value;
             }

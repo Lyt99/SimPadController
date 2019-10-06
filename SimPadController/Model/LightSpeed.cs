@@ -14,10 +14,10 @@ namespace SimPadController.Model
         /// <summary>
         /// 渐隐渐显延迟
         /// </summary>
-        public ushort EaseLightDelay;
+        public ushort EaseLightDelay { get; set; }
         /// <summary>
         /// 彩虹渐变延迟
         /// </summary>
-        public ushort RainbowLightDelay;
+        public ushort RainbowLightDelay { get; set; }
     }
 }
